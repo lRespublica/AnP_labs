@@ -2,9 +2,9 @@
 #include <math.h>
 #include <stdlib.h>
 
-double fact(int num)
+unsigned int fact(unsigned int num)
 {
-    int value = 1;
+    unsigned int value = 1;
     while(num > 0)
     {
         value *= num;
@@ -14,17 +14,17 @@ double fact(int num)
     return value;
 }
 
-double atanStep(double x, int i)
+double atanStep(const double x, const int i)
 {
     return pow(-1, i - 1) * pow(x, 2*i - 1) / fact(2*i - 1);
 }
 
-double calcWithAccuracy(const double x, const int n)
+double calcWithAccuracy(const double x, const unsigned int n)
 {
     double value = 0.0;
     double pastValue = 0.0;
 
-    int i = 1;
+    unsigned int i = 1;
     double avaitDiff = pow(0.1, n);
     double currDiff;
 
@@ -40,7 +40,7 @@ double calcWithAccuracy(const double x, const int n)
     return value;
 }
 
-double calcBySteps(const double x, const double n)
+double calcBySteps(const double x, const unsigned int n)
 {
     double value = 0.0;
     
