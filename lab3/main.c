@@ -2,6 +2,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define CHECK_INPUT(flag) if (!flag) {printf("Incorrect input\n"); return 1;};
+
 unsigned int fact(unsigned int num)
 {
     unsigned int value = 1;
@@ -53,10 +55,12 @@ double calcBySteps(const double x, const unsigned int n)
 int main()
 {
     double x;
+    int flag;
     unsigned int n, type;
 
     printf("Введите число x: ");
-    scanf("%lf", &x);
+    flag = scanf("%lf", &x);
+    CHECK_INPUT(flag);
 
     if (fabs(x) > 1)
     {
