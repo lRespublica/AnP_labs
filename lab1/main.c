@@ -2,19 +2,25 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define CHECK_INPUT(flag) if (!flag) {printf("Incorrect input\n"); return 1;};
+
 int main()
 {
     int x, y;
     double z;
+    int flag;
 
     printf("Введите число x: ");
-    scanf("%d", &x);
+    flag = scanf("%d", &x);
+    CHECK_INPUT(flag);
 
     printf("Введите число y: ");
-    scanf("%d", &y);
+    flag = scanf("%d", &y);
+    CHECK_INPUT(flag);
 
     printf("Введите число z: ");
-    scanf("%lf", &z);
+    flag = scanf("%lf", &z);
+    CHECK_INPUT(flag);
 
     printf("\n%-10d\n%-10d\n%-10.5e\n\n", x, y, z);
     
