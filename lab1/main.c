@@ -28,4 +28,6 @@ int main()
     double b = exp(-x+z) * atan(z/3) / (pow(x,2) - 6*y +12);
 
     printf("a = %.4f\nb = %.4f\nx = %o\ny = %x\n", a, b, x, y);
+
+    return 0;
 }

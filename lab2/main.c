@@ -16,12 +16,10 @@ int main()
 
     printf("Введите число x: ");
     flag = scanf("%lf", &x);
-
     CHECK_INPUT(flag);
 
     printf("Введите число y: ");
     flag = scanf("%lf", &y);
-
     CHECK_INPUT(flag);
     
     if(x > 0)
@@ -69,4 +67,6 @@ int main()
         printf("Точка (%f, %f) принадлежит заданной области\n", x, y);
     else
         printf("Точка (%f, %f) НЕ принадлежит заданной области\n", x, y);
+
+    return 0;
 }
