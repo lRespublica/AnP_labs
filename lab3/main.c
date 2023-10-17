@@ -18,7 +18,7 @@ unsigned int fact(unsigned int num)
 
 double atanStep(const double x, const int i)
 {
-    return pow(-1, i - 1) * pow(x, 2*i - 1) / fact(2*i - 1);
+    return pow(-1, i - 1) * pow(x, 2*i - 1) / (2*i - 1);
 }
 
 double calcWithAccuracy(const double x, const unsigned int n)
@@ -27,7 +27,7 @@ double calcWithAccuracy(const double x, const unsigned int n)
     double pastValue = 0.0;
 
     unsigned int i = 1;
-    double avaitDiff = pow(0.1, n);
+    const double avaitDiff = pow(0.1, n);
     double currDiff;
 
     do 
@@ -62,7 +62,7 @@ int main()
     flag = scanf("%lf", &x);
     CHECK_INPUT(flag);
 
-    if (fabs(x) > 1)
+    if (fabs(x) >= 1)
     {
         printf("Ошибка: Число x ∉ [-1, 1]\n");
         return 1;
@@ -72,7 +72,8 @@ int main()
     printf(" 1. С заданной точностью\n");
     printf(" 2. Для заданного количества членов ряда\n");
     printf("> ");
-    scanf("%u", &type);
+    flag = scanf("%u", &type);
+    CHECK_INPUT(flag);
     
     switch(type)
     {
