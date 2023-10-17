@@ -22,6 +22,18 @@ int mpow (int a, unsigned int n) {
     return res;
 }
 
+int mpowd (double a, unsigned int n) {
+    int res = 1;
+    while(n)
+    {
+        if (n & 1)
+            res *= a;
+        a *= a;
+        n >>= 1;
+    }
+    return res;
+}
+
 double msqrt(double a)
 {
     if(a < 0) return mNAN;
@@ -44,31 +56,34 @@ double mfreexp(double x)
     return mabs(x)-(int)(mabs(x));
 }
 
-double mlog(double a)
+int mround(double x)
 {
-    if(a < 0) return mNAN;
-    const double acc = 1e-8;
-    double x = 0;
+    if(x >= 0)
+        return mfreexp(x) >= 0.5 ? (int)x + 1 : (int)x;
+    else
+        return mfreexp(x) >= 0.5 ? (int)x - 1 : (int)x;
+}
 
-    while(1)
+unsigned int mlog2(unsigned int a)
+{
+    unsigned int value = 0;
+    while(a)
     {
-        double ax = (x + 1/a)/2;
-        if(mabs(ax - x) < acc)
-            break;
-        x = ax;
+        value++;
+        a >>= 1;
     }
-
-    return x;
+    return value;
 }
 
 double mlogn(int a, int b)
 {
-    return mlog(a)/mlog(b);
+    return (double)mlog2(a)/mlog2(b);
 }
 
 int main()
 {
-    int a, b;
-    scanf("%d%d", &a, &b);
-    printf("%d %d %d %d %lf %lf %lf", a, b, mpow(a, b), (int)msqrt(a), mlog(a), mlog(b), mlogn(a, b));
+    int a, b, c;
+    scanf("%d%d", &a, &b, &c);
+    int res = (int)(mpowd(mlogn((int)(msqrt((double)a/b)), c), b));
+    printf("%d, %d, %d, %d", mround(1.23), mround(1.6), mround(-1.23), mround(-1.6));
 }
