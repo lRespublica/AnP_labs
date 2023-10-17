@@ -4,18 +4,6 @@
 
 #define CHECK_INPUT(flag) if (!flag || feof(stdin)) {printf("Incorrect input\n"); return 1;};
 
-unsigned int fact(unsigned int num)
-{
-    unsigned int value = 1;
-    while(num > 0)
-    {
-        value *= num;
-        num--;
-    }
-
-    return value;
-}
-
 double atanStep(const double x, const int i)
 {
     return pow(-1, i - 1) * pow(x, 2*i - 1) / (2*i - 1);
@@ -62,7 +50,7 @@ int main()
     flag = scanf("%lf", &x);
     CHECK_INPUT(flag);
 
-    if (fabs(x) >= 1)
+    if (fabs(x) > 1)
     {
         printf("Ошибка: Число x ∉ [-1, 1]\n");
         return 1;
