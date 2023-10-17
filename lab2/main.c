@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define CHECK_INPUT(flag) if (!flag) {printf("Incorrect input\n"); return 1;};
+#define CHECK_INPUT(flag) if (!flag || feof(stdin)) {printf("Incorrect input\n"); return 1;};
 
 int isInArea(double x, double y)
 {
