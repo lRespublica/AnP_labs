@@ -44,7 +44,8 @@ int main()
 {
     double x;
     int flag;
-    unsigned int n, type;
+    unsigned int type;
+    int n;
 
     printf("Введите число x: ");
     flag = scanf("%lf", &x);
@@ -56,7 +57,8 @@ int main()
         return 1;
     }
 
-    printf("\nВыберите способ посчёта:\n");
+    printf("\nОжидаемый результат: %lf\n", atan(x));
+    printf("Выберите способ подсчёта:\n");
     printf(" 1. С заданной точностью\n");
     printf(" 2. Для заданного количества членов ряда\n");
     printf("> ");
@@ -67,15 +69,29 @@ int main()
     {
         case 1:
             printf("\nВведите точность:\n> ");
-            scanf("%u", &n);
+            flag = scanf("%d", &n);
+            CHECK_INPUT(flag);
             
+            if(n <= 0)
+            {
+                printf("Точность должна быть больше 0\n");
+                return 1;
+            }
+
             printf("Значение arctg(%f) со степенью точности %u = %f\n", x, n, calcWithAccuracy(x, n));
 
             break;
 
         case 2:
             printf("\nВведите количество шагов:\n> ");
-            scanf("%u", &n);
+            flag = scanf("%d", &n);
+            CHECK_INPUT(flag);
+
+            if(n <= 0)
+            {
+                printf("Количество шагов должно быть больше 0\n");
+                return 1;
+            }
 
             printf("Значение arctg(%f) за %u шагов вычислений = %f\n", x, n, calcBySteps(x, n));
 
