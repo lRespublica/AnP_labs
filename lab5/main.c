@@ -89,13 +89,13 @@ int main()
         arr[i] = alloca(sizeof(int) * n);
     }
 
-    //if(inputArray(arr, m, n) == 1)
-    //    return 1;
+//    if(inputArray(arr, m, n) == 1)
+//        return 1;
     randomArray(arr, m, n);
     printArray(arr, m, n);
 
     int value = solveTask(arr, m, n);
     printf("\nРезультат: %d\n", solveTask(arr, m, n));
     printf("\nМаксимальное значение: %d", findUpperMax(arr, m, n));
-    printf("\nМинимальное значение: %d", findLowerMin(arr, m, n));
+    printf("\nМинимальное значение: %d\n", findLowerMin(arr, m, n));
 }

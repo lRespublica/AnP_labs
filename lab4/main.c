@@ -33,7 +33,7 @@ double findAverageTask(double* arr, int size)
         }
     }
 
-    for(int i = minI; i < size; i++)
+    for(int i = minI+1; i < size; i++)
     {
         total += arr[i];
         amount ++;
