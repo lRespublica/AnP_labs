@@ -25,6 +25,15 @@ void criticalError(char* message)
     exit(1);
 }
 
+void skipLine()
+{
+    char c;
+    do
+    {
+        c = getchar();
+    } while(c != EOF && c != '\n');
+}
+
 FILE* initDB()
 {
     FILE* DB = fopen("./flight.db", "r");
@@ -86,6 +95,72 @@ dataStruct getInitData(FILE* DB)
     return data;
 }
 
+int checkDateNumbers(int day, int month, int year)
+{
+    if(day < 1 || day > 31 || month < 1 || month > 12 || year < 1909)
+        return 0;
+
+    if(day > 30 && (month != 1 && month != 3 && month != 5 && month != 7 && month != 8 && month != 10 && month != 12))
+        return 0;
+
+    if(day > 29 && month == 2)
+        return 0;
+
+    if(day > 28 && month == 2 && !(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)))
+        return 0;
+
+    return 1;
+}
+
+int verifyDate(char* date)
+{
+    if(strlen(date) != 11)
+        return 0;
+
+    int day = atoi(strtok(date, "."));
+    int month = atoi(strtok(NULL, "."));
+    int year = atoi(strtok(NULL, "."));
+
+    if (checkDateNumbers(day, month, year) == 0)
+    {
+        printf("Некорректная дата\n");
+        return 0;
+    }
+
+    return 1;
+}
+
+record inputRecord()
+{
+    record rec;
+    char BUFF[64];
+
+    printf("Введите номер рейса: ");
+    scanf(" %u", &rec.flight);
+    skipLine();
+
+    do 
+    {
+        printf("Введите дату в формате (дд.мм.гггг): ");
+        fgets(BUFF, 64, stdin);
+    } while(verifyDate(BUFF) != 1);
+
+    printf("%d", strlen(BUFF));
+
+    printf("Введите имя: ");
+    
+
+    return rec;
+}
+
+void appendDB(dataStruct* data, record rec)
+{
+    data->size += 1;
+    data->data = realloc(data->data, data->size);
+
+    data->data[data->size] = rec; 
+}
+
 void printDB(dataStruct data)
 {
     for(int i = 0; i < data.size; i++)
@@ -112,6 +187,7 @@ int main()
     dataStruct data = getInitData(DB);
     printDB(data);
 
+    inputRecord();
 
     fclose(DB);
     saveDB(data);
