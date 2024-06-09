@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -130,6 +129,29 @@ int verifyDate(char* date)
     return 1;
 }
 
+date parseDate(const char* origDateStr)
+{
+    date dateStruct;
+
+    int dateStrLen = strlen(origDateStr);
+    char* dateStr = malloc(sizeof(char) * dateStrLen);
+    strcpy(dateStr, origDateStr);
+
+    char* currToken = strtok(dateStr, ".");
+    dateStruct.day = atoi(currToken);
+
+    currToken = strtok(NULL, ".");
+    dateStruct.month = atoi(currToken);
+
+    currToken = strtok(NULL, ".");
+    dateStruct.year = atoi(currToken);
+
+    free(dateStr);
+    dateStr = NULL;
+
+    return dateStruct;
+}
+
 record inputRecord()
 {
     record rec;
@@ -145,7 +167,7 @@ record inputRecord()
         fgets(BUFF, 64, stdin);
     } while(verifyDate(BUFF) != 1);
 
-    printf("%d", strlen(BUFF));
+    printf("%lu", strlen(BUFF));
 
     printf("Введите имя: ");
     
