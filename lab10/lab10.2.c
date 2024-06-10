@@ -129,7 +129,6 @@ int main ()
     while (scanf("%s", input) == 1) 
     {
         int len = strlen(input);
-
         int breakFlag = 0;
 
         for (int i = 0; i < len; i++) 

@@ -181,12 +181,9 @@ int main()
             appendNode(poly1, &tmp);
     }while(!feof(stdin));
 
-    printPoly(poly1);
 
     poly1 = clearFromZeroes(poly1);
     polyNode* poly2 = appendList(NULL, poly1);
-
-    printPoly(poly1);
 
     calculateDerivate(poly1);
     poly1 = clearFromZeroes(poly1);
