@@ -2,7 +2,6 @@
 #include "string.h"
 #include "stdlib.h"
 #include "time.h"
-#include "sys/time.h"
 
 #define DEBUG 0
 
@@ -451,5 +450,5 @@ int main()
     int tookTime = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_nsec - start.tv_nsec) / 1000;
 
     printf("Is array sorted: %d\n", isSorted(generatedRecords, amount, order));
-    printf("It took %d ms\n", tookTime);
+    printf("It took %d mcs\n", tookTime);
 }
