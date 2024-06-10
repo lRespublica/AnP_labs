@@ -2,8 +2,9 @@
 #include "string.h"
 #include "stdlib.h"
 #include "time.h"
+#include "sys/time.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 typedef struct{
     unsigned int year;
@@ -277,20 +278,178 @@ void bubbleSort(record** records, int amount, sortOrder order)
     }
 }
 
+void coctailSort(record** records, int amount, sortOrder order)
+{
+    int left = 0;
+    int right = amount - 1;
+    int continueFlag = 1;
+
+    while(left < right && continueFlag != 0)
+    {
+        continueFlag = 0;
+
+        for(int j = left; j < right; j++)
+        {
+            if(compareRecord(records[j], records[j + 1], order) == 1)
+            {
+                record* tmp = records[j];
+                records[j] = records[j + 1];
+                records[j + 1] = tmp;
+
+                continueFlag = 1;
+            }
+        }
+
+        if(continueFlag == 0)
+            break;
+    
+        right--;
+
+        for(int j = right; j > left; j--)
+        {
+            if(compareRecord(records[j], records[j - 1], order) == 0)
+            {
+                record* tmp = records[j];
+                records[j] = records[j - 1];
+                records[j - 1] = tmp;
+
+                continueFlag = 1;
+            }
+        }
+
+        left++;
+    }
+}
+
+void quickSort(record** records, int amount, sortOrder order)
+{
+    record* pivot; 
+    
+    int left = 0;
+    int right = amount - 1;
+
+    pivot = records[left];
+    while (left < right)
+    {
+        while ((compareRecord(records[right], pivot, order) == 1) && (left < right))
+            right--;
+        if (left != right)
+        {
+            records[left] = records[right];
+            left++;
+        }
+        while ((compareRecord(records[left], pivot, order) == 0) && (left < right))
+            left++;
+        if (left != right)
+        {
+            records[right] = records[left];
+            right--; 
+        }
+    }
+    records[left] = pivot; 
+    
+    if (left > 0 )
+        quickSort(records, left, order);
+    if (left < amount)
+        quickSort(records + left + 1, amount - left - 1, order);
+}
+
 int main()
 {
     srand(time(NULL));
 
-    int amount = 10;
+    #define amountTypesLen 7
 
-    sortOrder order = DESCENDING;
+    int amountTypes[amountTypesLen] = {100, 1000, 5000, 10000, 20000, 50000, 100000}; 
+
+    struct timespec start, end;
+    int amount = 10;
+    int input;
+    sortOrder order = ASCENDING;
+
+    printf("Enter direction:\n 1. Ascending\n 2. Descending\n> ");
+    scanf("%d", &input);
+
+    switch(input)
+    {
+        case 1:
+            order = ASCENDING;
+            break;
+        case 2:
+            order = DESCENDING;
+            break;
+        default:
+            printf("\nUnrecognized option!\n");
+            return 1;
+            break;
+    }
+
+    input = 0;
+
+    printf("\nEnter amount:\n");
+    for(int i = 0; i < amountTypesLen; i++)
+        printf(" %d. %d\n", i+1, amountTypes[i]);
+    printf("> ");
+    scanf("%d", &input);
+
+    if(input >= 1 && input <= amountTypesLen)
+    {
+        amount = amountTypes[input - 1];
+    }
+    else
+    {
+        printf("\nUnrecognized option!\n");
+        return 1;
+    }
+
+    input = 0;
+
+    printf("\nEnter sort type:\n 1. Bubble sort\n 2. Cocktail sort\n 3. Quick sort\n> ");
+    scanf("%d", &input);
+
+    if(input < 1 || input > 3)
+    {
+          printf("\nUnrecognized option!\n");
+          return 1;
+    }  
+
 
     record** generatedRecords = generateRandomRecords(amount);
 
-    record** toBeBubbleSorted = copyRecordsArray(generatedRecords, amount);
+    printf("\n");
+    switch(input)
+    {
+        case 1:
+            printf("We use bubble sort\n");
+            
+            clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+            bubbleSort(generatedRecords, amount, order);
+            clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+            
+            break;
+        case 2:
+            printf("We use cocktail sort\n");
+            
+            clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+            coctailSort(generatedRecords, amount, order);
+            clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+            
+            break;
+        case 3:
+            printf("We use quick sort\n");
+            
+            clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+            quickSort(generatedRecords, amount, order);
+            clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+            
+            break;
 
-    bubbleSort(toBeBubbleSorted, amount, order);
+        default:              
+            printf("\nUnrecognized option!\n");                                 
+            return 1;
+    }
+    int tookTime = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_nsec - start.tv_nsec) / 1000;
 
-    printRecordsArray(generatedRecords, 10, stderr);
-    printRecordsArray(toBeBubbleSorted, 10, stderr);
+    printf("Is array sorted: %d\n", isSorted(generatedRecords, amount, order));
+    printf("It took %d ms\n", tookTime);
 }
