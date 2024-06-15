@@ -111,7 +111,7 @@ void rehashTable(recordsTable* table);
 
 void addTableElement(recordsTable* table, const record* record )
 {
-    unsigned int crc = crc32((const unsigned char*) record, sizeof(*record));  
+    unsigned int crc = crc32((const unsigned char*) record->name, strlen(record->name));  
 
     hashTableNode** tableRecord = getRecordsByHash(table, crc);
 
@@ -128,7 +128,7 @@ void addTableElement(recordsTable* table, const record* record )
 
 void addTableElementViaPointer(recordsTable* table, record* record )
 {
-    unsigned int crc = crc32((const unsigned char*) record, sizeof(*record));
+    unsigned int crc = crc32((const unsigned char*) record->name, strlen(record->name));
 
     hashTableNode** tableRecord = getRecordsByHash(table, crc);
 
@@ -161,6 +161,48 @@ void rehashTable(recordsTable* table)
     }
 }
 
+void printRecord(const record* record, FILE* dest);
+
+void printRecordByName(recordsTable* table, const char* name)
+{
+    unsigned int crc = crc32((const unsigned char*) name, strlen(name));
+
+    hashTableNode* curNode = table->arr[crc % table->size];
+
+    int countFlag = 0;
+
+    printf("Records with name %s:\n", name);
+
+    while(curNode != NULL)
+    {
+        if(strcmp(name, curNode->value->name) == 0)
+        {
+            printRecord(curNode->value, stdout);
+            printf("\n");
+        
+            countFlag++;
+        }
+
+        curNode = curNode->next;
+    }
+
+    if(countFlag == 0)
+    {
+        printf("We have not found record with given name :(\n");
+        return;
+    }
+}
+
+recordsTable* createRecordsTableFromArray(record** array, int size)
+{
+    recordsTable* table = createClearTable(size);
+
+    for(int i = 0; i < size; i++)
+        addTableElement(table, array[i]);
+
+    return table;
+}
+
 void printRecord(const record* record, FILE* dest)
 {
     fprintf(dest, "Flight: %d\n", record->flight);
@@ -177,6 +219,7 @@ void printTable(const recordsTable* table)
     for(int i = 0; i < table->size; i++)
     {
         hashTableNode* curNode = table->arr[i];
+        printf("\n***\n");
         printf("Hash: %x\n", i);
         while (curNode != NULL)
         {
@@ -185,6 +228,6 @@ void printTable(const recordsTable* table)
 
             curNode = curNode->next;
         }
-        printf("\n");
+        printf("***\n");
     }
 }
